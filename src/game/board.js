@@ -1,0 +1,5 @@
+import React from 'react';
+
+export class Board extends React.Component {
+    
+}
