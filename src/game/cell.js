@@ -1,33 +1,19 @@
 import React from 'react';
+import './css/cell.css';
 
 export class Cell extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            alive : false
-        };
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick(e) {
-        if (this.state.alive) {
-            kill();
-        } else {
-            create();
-        }
-    }
-
-    create() {
-        this.setState({alive : true});
-    }
-
-    kill() {
-        this.setState({alive : false});
+    handleClick = (e) => {
+        this.props.onClick(this.props);
     }
 
     render() {
-        if (this.state.alive) {
+        if (this.props.alive) {
             return (
                 <button className="aliveCell" onClick={this.handleClick}></button>
             );
