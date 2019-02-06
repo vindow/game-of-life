@@ -7,9 +7,9 @@ export class Board extends React.Component {
     constructor(props) {
         super(props);
         let cells = [];
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 40; i++) {
             let cellRow = [];
-            for (let j = 0; j < 3; j++) {
+            for (let j = 0; j < 75; j++) {
                 cellRow.push(false);
             }
             cells.push(cellRow);
@@ -20,10 +20,6 @@ export class Board extends React.Component {
         }
         this.nextGeneration = this.nextGeneration.bind(this);
         this.toggleCell = this.toggleCell.bind(this);
-    }
-
-    createGrid = () => {
-        
     }
     
     createTable = () => {
@@ -57,13 +53,15 @@ export class Board extends React.Component {
     }
 
     nextGeneration = (e) => {
-        let newGrid = this.state.grid;
-        for (let i = 0; i < newGrid.length; i++) {
-            for (let j = 0; j < newGrid[0].length; j++) {
-                newGrid[i][j] = this.checkNeighbors(i, j);
+        let newGrid = [];
+        for (let i = 0; i < this.state.grid.length; i++) {
+            let newGridRow = [];
+            for (let j = 0; j < this.state.grid[i].length; j++) {
+                newGridRow.push(this.checkNeighbors(i, j));
             }
+            newGrid.push(newGridRow);
         }
-        this.setState({grid: newGrid});
+        this.setState({grid : newGrid});
     }
 
     checkNeighbors = (row, col) => {
@@ -79,7 +77,6 @@ export class Board extends React.Component {
                 }
             }
         }
-        console.log("Coords: " + row + ", " + col + "; numAliveNeighbors: " + numAliveNeighbors);
         if (this.state.grid[row][col]) {
             // Decrement the neighbor count to not count itself as an alive neighbor
             numAliveNeighbors--;
