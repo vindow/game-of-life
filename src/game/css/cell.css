@@ -1,7 +1,7 @@
 .aliveCell {
     display: block;
     background-color: #25892D;
-    width: 100%;
+    width: 20px;
     height: 20px;
     margin: -2px;
 }
@@ -9,7 +9,7 @@
 .deadCell {
     display: block;
     background-color: #FFFFFF;
-    width: 100%;
+    width: 20px;
     height: 20px;
     margin: -2px;
 }
