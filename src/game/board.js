@@ -22,16 +22,16 @@ class Board extends React.Component {
             grid : cells,
             speed: 2,
             density: 0.5,
-            running: false
+            running: false,
+            wrapping: false
         }
         
         this.nextGeneration = this.nextGeneration.bind(this);
         this.toggleCell = this.toggleCell.bind(this);
         this.autoGeneration = this.autoGeneration.bind(this);
         this.pauseGeneration = this.pauseGeneration.bind(this);
-        this.speedSliderChange = this.speedSliderChange.bind(this);
+        this.handleInput = this.handleInput.bind(this);
         this.randomize = this.randomize.bind(this);
-        this.densitySliderChange = this.densitySliderChange.bind(this);
     }
     
     // Creates the actual to-be-displayed board of cells based on the staste of the grid array
@@ -84,11 +84,31 @@ class Board extends React.Component {
     checkNeighbors = (row, col) => {
         let numAliveNeighbors = 0;
         for (let i = row - 1; i <= row + 1; i++) {
-            // Pass over row if out of bounds
-            if (i >= 0 && i < this.state.grid.length) {
-                for (let j = col - 1; j <= col + 1; j++) {
-                    // Pass over column if out of bounds
-                    if (j >= 0 && j < this.state.grid[i].length) {
+            for (let j = col - 1; j <= col + 1; j++) {
+                if (this.state.wrapping) {
+                    let rowToCheck = i;
+                    let colToCheck = j;
+                    // Check the wrapped around row if checked cell's row is on the edge of the board
+                    if (i < 0) {
+                        rowToCheck = this.state.grid.length - 1;
+                    } else if (i >= this.state.grid.length) {
+                        rowToCheck = 0;
+                    }
+                    // Check the wrapped around column if checked cell's column is on the edge of the baord
+                    if (j < 0) {
+                        colToCheck = this.state.grid[rowToCheck].length - 1;
+                    } else if (j >= this.state.grid[rowToCheck].length) {
+                        colToCheck = 0;
+                    }
+
+                    if (this.state.grid[rowToCheck][colToCheck]) {
+                        numAliveNeighbors++;
+                    }
+                } else {
+                    // Pass over row if out of bounds
+                    if (i < 0 || i >= this.state.grid.length || j < 0 || j >= this.state.grid[0].length) {
+                        continue;
+                    } else {
                         if (this.state.grid[i][j]) {
                             numAliveNeighbors++;
                         }
@@ -96,8 +116,9 @@ class Board extends React.Component {
                 }
             }
         }
+
+        // Decrement the neighbor count to not count itself as an alive neighbor
         if (this.state.grid[row][col]) {
-            // Decrement the neighbor count to not count itself as an alive neighbor
             numAliveNeighbors--;
             if (numAliveNeighbors === 2 || numAliveNeighbors === 3){
                 return true;
@@ -124,8 +145,11 @@ class Board extends React.Component {
     }
 
     // Sets the speed of the autoGeneration (speed is times to update per second)
-    speedSliderChange = (e) => {
-        this.setState({speed: e.target.value});
+    handleInput = (e) => {
+        const target = e.target;
+        const value = target.type === "checkbox" ? target.checked : target.value;
+        const name = target.name;
+        this.setState({[name]: value});
     }
 
     // Creates a new randomized grid based on the given density value from the slider
@@ -145,12 +169,6 @@ class Board extends React.Component {
         this.setState({grid : newGrid});
     }
 
-    // Sets the density value of the randomize function
-    densitySliderChange = (e) => {
-        this.setState({density: e.target.value});
-    }
-
-    // TODO: Add board wrapping (like asteroids) option
     // TODO: Add color picking for alive cells
     // TODO: Add option to change game parameters (e.g. death/survival/birth conditions)
 
@@ -160,17 +178,21 @@ class Board extends React.Component {
                 <table className="boardTable">
                     {this.createBoard()}
                 </table>
-                <button onClick={this.nextGeneration} disabled={this.state.running}>Step Generation</button>
                 <div>
                     <span>Auto-Run Speed (iterations per second): {this.state.speed}</span>
-                    <input id="stepSpeed" type="range" min="1" max="4" defaultValue={this.state.speed} onChange={this.speedSliderChange} step="1"/>
+                    <input id="speed" name="speed" type="range" min="1" max="4" defaultValue={this.state.speed} onChange={this.handleInput} step="1"/>
                     <button onClick={this.autoGeneration} disabled={this.state.running}>Auto-Run Generation</button>
                     <button onClick={this.pauseGeneration} disabled={!this.state.running}>Pause Generation</button>
+                    <button onClick={this.nextGeneration} disabled={this.state.running}>Step Generation</button>
                 </div>
                 <div>
                     <span>Randomize Cell Density: {this.state.density}</span>
-                    <input id="density" type="range" min="0" max="1" defaultValue={this.state.density} onChange={this.densitySliderChange} step="0.1"/>
+                    <input id="density" name="density" type="range" min="0" max="1" defaultValue={this.state.density} onChange={this.handleInput} step="0.1"/>
                     <button onClick={this.randomize} disabled={this.state.running}>Randomize Cells</button>
+                </div>
+                <div>
+                    <span>Board Wrapping: </span>
+                    <input name="wrapping" type="checkbox" checked={this.state.wrapping} onChange={this.handleInput}></input>
                 </div>
             </div>
         );
