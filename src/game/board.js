@@ -17,12 +17,14 @@ class Board extends React.Component {
             }
             cells.push(cellRow);
         }
+        // Create the initial state
         this.state = {
             grid : cells,
             speed: 2,
             density: 0.5,
             running: false
         }
+        
         this.nextGeneration = this.nextGeneration.bind(this);
         this.toggleCell = this.toggleCell.bind(this);
         this.autoGeneration = this.autoGeneration.bind(this);
@@ -32,7 +34,8 @@ class Board extends React.Component {
         this.densitySliderChange = this.densitySliderChange.bind(this);
     }
     
-    createTable = () => {
+    // Creates the actual to-be-displayed board of cells based on the staste of the grid array
+    createBoard = () => {
         let table = [];
         
         // Outer loop to create rows of weeks
@@ -108,21 +111,24 @@ class Board extends React.Component {
         }
     }
 
+    // Runs nextGeneration at a set interval
     autoGeneration = (e) => {
         this.setState({running: true});
         this.runInterval = this.props.setInterval(this.nextGeneration, 1000 / this.state.speed);
     }
 
+    // Stops the set interval of autoGeneration
     pauseGeneration = (e) => {
         this.setState({running: false});
         this.props.clearInterval(this.runInterval);
     }
 
+    // Sets the speed of the autoGeneration (speed is times to update per second)
     speedSliderChange = (e) => {
         this.setState({speed: e.target.value});
     }
 
-    // Creates a new randomized grid
+    // Creates a new randomized grid based on the given density value from the slider
     randomize = (e) => {
         let newGrid = [];
         for (let i = 0; i < this.state.grid.length; i++) {
@@ -139,15 +145,20 @@ class Board extends React.Component {
         this.setState({grid : newGrid});
     }
 
+    // Sets the density value of the randomize function
     densitySliderChange = (e) => {
         this.setState({density: e.target.value});
     }
+
+    // TODO: Add board wrapping (like asteroids) option
+    // TODO: Add color picking for alive cells
+    // TODO: Add option to change game parameters (e.g. death/survival/birth conditions)
 
     render() {
         return(
             <div>
                 <table className="boardTable">
-                    {this.createTable()}
+                    {this.createBoard()}
                 </table>
                 <button onClick={this.nextGeneration} disabled={this.state.running}>Step Generation</button>
                 <div>
