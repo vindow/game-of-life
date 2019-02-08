@@ -20,13 +20,16 @@ class Board extends React.Component {
         this.state = {
             grid : cells,
             speed: 2,
+            density: 0.5,
             running: false
         }
         this.nextGeneration = this.nextGeneration.bind(this);
         this.toggleCell = this.toggleCell.bind(this);
         this.autoGeneration = this.autoGeneration.bind(this);
         this.pauseGeneration = this.pauseGeneration.bind(this);
-        this.sliderChange = this.sliderChange.bind(this);
+        this.speedSliderChange = this.speedSliderChange.bind(this);
+        this.randomize = this.randomize.bind(this);
+        this.densitySliderChange = this.densitySliderChange.bind(this);
     }
     
     createTable = () => {
@@ -115,8 +118,29 @@ class Board extends React.Component {
         this.props.clearInterval(this.runInterval);
     }
 
-    sliderChange = (e) => {
+    speedSliderChange = (e) => {
         this.setState({speed: e.target.value});
+    }
+
+    // Creates a new randomized grid
+    randomize = (e) => {
+        let newGrid = [];
+        for (let i = 0; i < this.state.grid.length; i++) {
+            let newGridRow = [];
+            for (let j = 0; j < this.state.grid[i].length; j++) {
+                if (Math.random() < this.state.density) {
+                    newGridRow.push(true);
+                } else {
+                    newGridRow.push(false);
+                }
+            }
+            newGrid.push(newGridRow);
+        }
+        this.setState({grid : newGrid});
+    }
+
+    densitySliderChange = (e) => {
+        this.setState({density: e.target.value});
     }
 
     render() {
@@ -128,9 +152,14 @@ class Board extends React.Component {
                 <button onClick={this.nextGeneration} disabled={this.state.running}>Step Generation</button>
                 <div>
                     <span>Auto-Run Speed (iterations per second): {this.state.speed}</span>
-                    <input id="stepSpeed" type="range" min="1" max="4" defaultValue={this.state.speed} onChange={this.sliderChange} step="1"/>
+                    <input id="stepSpeed" type="range" min="1" max="4" defaultValue={this.state.speed} onChange={this.speedSliderChange} step="1"/>
                     <button onClick={this.autoGeneration} disabled={this.state.running}>Auto-Run Generation</button>
                     <button onClick={this.pauseGeneration} disabled={!this.state.running}>Pause Generation</button>
+                </div>
+                <div>
+                    <span>Randomize Cell Density: {this.state.density}</span>
+                    <input id="density" type="range" min="0" max="1" defaultValue={this.state.density} onChange={this.densitySliderChange} step="0.1"/>
+                    <button onClick={this.randomize} disabled={this.state.running}>Randomize Cells</button>
                 </div>
             </div>
         );
