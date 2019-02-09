@@ -1,15 +1,15 @@
-.aliveCell {
-    display: block;
+#aliveCell {
     background-color: #25892D;
-    width: 20px;
-    height: 20px;
-    margin: -2px;
 }
 
-.deadCell {
-    display: block;
+#deadCell {
     background-color: #FFFFFF;
+}
+
+.cell {
+    display: block;
+    border: solid 1px grey;
     width: 20px;
     height: 20px;
-    margin: -2px;
+    margin: -2.5px;
 }

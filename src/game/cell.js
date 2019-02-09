@@ -15,11 +15,11 @@ export class Cell extends React.Component {
     render() {
         if (this.props.alive) {
             return (
-                <button className="aliveCell" onClick={this.handleClick}></button>
+                <button className="cell" id="aliveCell" onClick={this.handleClick}></button>
             );
         } else {
             return (
-                <button className="deadCell" onClick={this.handleClick}></button>
+                <button className="cell" id="deadCell" onClick={this.handleClick}></button>
             );
         }
         
