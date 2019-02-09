@@ -1,3 +1,7 @@
+# Game of Life
+
+This is a project made using React to simulate Conway's Game of Life(see https://en.wikipedia.org/wiki/Conway%27s_game_of_life). It also has options to alter the birth and survival values to simulate other Life-like games.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
