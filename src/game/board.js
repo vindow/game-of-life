@@ -40,6 +40,7 @@ class Board extends React.Component {
         this.handleInput = this.handleInput.bind(this);
         this.handleSurvivalInput = this.handleSurvivalInput.bind(this);
         this.randomize = this.randomize.bind(this);
+        this.clearBoard = this.clearBoard.bind(this);
     }
     
     // Creates the actual to-be-displayed board of cells based on the staste of the grid array
@@ -187,6 +188,19 @@ class Board extends React.Component {
         this.setState({grid : newGrid});
     }
 
+    // Clears the board completely, killing all cells
+    clearBoard = (e) => {
+        let newGrid = [];
+        for (let i = 0; i < 40; i++) {
+            let newGridRow = [];
+            for (let j = 0; j < 75; j++) {
+                newGridRow.push(false);
+            }
+            newGrid.push(newGridRow);
+        }
+        this.setState({grid: newGrid});
+    }
+
     // TODO: Add color picking for alive cells
 
     render() {
@@ -206,6 +220,7 @@ class Board extends React.Component {
                     {this.createBoard()}
                 </table>
                 <div id="options">
+                    <span id="optionsHeader">Options</span>
                     <div className="optionRow">
                         <div>
                             <span>Auto-Run Speed (iterations per second): {this.state.speed}</span>
@@ -227,7 +242,10 @@ class Board extends React.Component {
                                 <span>Randomize Cell Density: {this.state.density}</span>
                                 <input className="slider" id="density" name="density" type="range" min="0.1" max="0.9" defaultValue={this.state.density} onChange={this.handleInput} step="0.1"/>
                             </div>
-                            <button className="row" onClick={this.randomize} disabled={this.state.running}>Randomize Cells</button>
+                            <div id="buttonRow">
+                                <button onClick={this.randomize} disabled={this.state.running}>Randomize Cells</button>
+                                <button id="clearButton" onClick={this.clearBoard} disabled={this.state.running}>Clear All</button>
+                            </div>
                         </div>
                         <div>
                             <div className="row">

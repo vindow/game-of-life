@@ -9,17 +9,31 @@
 #options {
     margin: 1em auto 1em auto;
     border: solid 1px black;
-    padding: 1em;
+    padding: 0.5em 1em 1em 1em;
     width: 60%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+#optionsHeader {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 0.25em;
 }
 .optionRow {
     margin-top: 0.25em;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+#buttonRow {
+    width: 65%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#clearButton {
+    color: red;
 }
 .row {
     margin: 0.25em 0 0.25em 0;
