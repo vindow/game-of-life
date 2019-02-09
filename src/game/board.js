@@ -206,7 +206,7 @@ class Board extends React.Component {
                     {this.createBoard()}
                 </table>
                 <div id="options">
-                    <div id="generationOptions">
+                    <div className="optionRow">
                         <div>
                             <span>Auto-Run Speed (iterations per second): {this.state.speed}</span>
                             <input className="slider" id="speed" name="speed" type="range" min="1" max="4" defaultValue={this.state.speed} onChange={this.handleInput} step="1"/>
@@ -221,20 +221,24 @@ class Board extends React.Component {
                             <label>Board Wrapping</label>
                         </div>
                     </div>
-                    <div id="randomOptions">
-                        <div>
-                            <span>Randomize Cell Density: {this.state.density}</span>
-                            <input className="slider" id="density" name="density" type="range" min="0" max="1" defaultValue={this.state.density} onChange={this.handleInput} step="0.1"/>
+                    <div className="optionRow">
+                        <div id="randomOptions">
+                            <div className="row">
+                                <span>Randomize Cell Density: {this.state.density}</span>
+                                <input className="slider" id="density" name="density" type="range" min="0.1" max="0.9" defaultValue={this.state.density} onChange={this.handleInput} step="0.1"/>
+                            </div>
+                            <button className="row" onClick={this.randomize} disabled={this.state.running}>Randomize Cells</button>
                         </div>
-                        <button onClick={this.randomize} disabled={this.state.running}>Randomize Cells</button>
-                    </div>
-                    <div>
-                        <span>Birth Conditions: </span>
-                        {birthChecks}
-                    </div>
-                    <div>
-                        <span>Survival Conditions: </span>
-                        {survivalChecks}
+                        <div>
+                            <div className="row">
+                                <span>Birth Conditions: </span>
+                                {birthChecks}
+                            </div>
+                            <div className="row">
+                                <span>Survival Conditions: </span>
+                                {survivalChecks}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
