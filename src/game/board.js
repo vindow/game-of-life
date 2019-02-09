@@ -17,13 +17,20 @@ class Board extends React.Component {
             }
             cells.push(cellRow);
         }
+
+        //Set default birth/death rates for game of life (B3S23)
+        let bir = [false, false, false, true, false, false, false, false, false];
+        let surv = [false, false, true, true, false, false, false, false, false];
+
         // Create the initial state
         this.state = {
             grid : cells,
             speed: 2,
             density: 0.5,
             running: false,
-            wrapping: false
+            wrapping: false,
+            birth: bir,
+            survival: surv
         }
         
         this.nextGeneration = this.nextGeneration.bind(this);
@@ -31,6 +38,7 @@ class Board extends React.Component {
         this.autoGeneration = this.autoGeneration.bind(this);
         this.pauseGeneration = this.pauseGeneration.bind(this);
         this.handleInput = this.handleInput.bind(this);
+        this.handleSurvivalInput = this.handleSurvivalInput.bind(this);
         this.randomize = this.randomize.bind(this);
     }
     
@@ -120,15 +128,9 @@ class Board extends React.Component {
         // Decrement the neighbor count to not count itself as an alive neighbor
         if (this.state.grid[row][col]) {
             numAliveNeighbors--;
-            if (numAliveNeighbors === 2 || numAliveNeighbors === 3){
-                return true;
-            }
-            return false;
+            return this.state.survival[numAliveNeighbors];
         } else {
-            if (numAliveNeighbors === 3) {
-                return true;
-            }
-            return false;
+            return this.state.birth[numAliveNeighbors];
         }
     }
 
@@ -144,12 +146,28 @@ class Board extends React.Component {
         this.props.clearInterval(this.runInterval);
     }
 
-    // Sets the speed of the autoGeneration (speed is times to update per second)
+    // Sets the slider values to their appropriate values in the state (speed and density) as well as the checkbox variable for wrapping
     handleInput = (e) => {
         const target = e.target;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const name = target.name;
         this.setState({[name]: value});
+    }
+
+    handleSurvivalInput = (e) => {
+        let name = e.target.name;
+        let checked = e.target.checked;
+        if (name.startsWith("birth")) {
+            let newBirth = this.state.birth.slice();
+            let index = name.slice(-1);
+            newBirth[index] = checked;
+            this.setState({birth: newBirth});
+        } else {
+            let newSurvival = this.state.survival.slice();
+            let index = name.slice(-1);
+            newSurvival[index] = checked;
+            this.setState({survival: newSurvival});
+        }
     }
 
     // Creates a new randomized grid based on the given density value from the slider
@@ -170,29 +188,54 @@ class Board extends React.Component {
     }
 
     // TODO: Add color picking for alive cells
-    // TODO: Add option to change game parameters (e.g. death/survival/birth conditions)
 
     render() {
+        let birthChecks = [];
+        let survivalChecks = [];
+        for (let i = 0; i < 9; i++) {
+            let birthName = "birth" + i;
+            let survivalName = "survival" + i;
+            birthChecks.push(<input name={birthName} type="checkbox" checked={this.state.birth[i]} onChange={this.handleSurvivalInput}></input>);
+            birthChecks.push(<label>{i}</label>);
+            survivalChecks.push(<input name={survivalName} type="checkbox" checked={this.state.survival[i]} onChange={this.handleSurvivalInput}></input>);
+            survivalChecks.push(<label>{i}</label>);
+        }
         return(
-            <div>
-                <table className="boardTable">
+            <div id="board">
+                <table id="table">
                     {this.createBoard()}
                 </table>
-                <div>
-                    <span>Auto-Run Speed (iterations per second): {this.state.speed}</span>
-                    <input id="speed" name="speed" type="range" min="1" max="4" defaultValue={this.state.speed} onChange={this.handleInput} step="1"/>
-                    <button onClick={this.autoGeneration} disabled={this.state.running}>Auto-Run Generation</button>
-                    <button onClick={this.pauseGeneration} disabled={!this.state.running}>Pause Generation</button>
-                    <button onClick={this.nextGeneration} disabled={this.state.running}>Step Generation</button>
-                </div>
-                <div>
-                    <span>Randomize Cell Density: {this.state.density}</span>
-                    <input id="density" name="density" type="range" min="0" max="1" defaultValue={this.state.density} onChange={this.handleInput} step="0.1"/>
-                    <button onClick={this.randomize} disabled={this.state.running}>Randomize Cells</button>
-                </div>
-                <div>
-                    <span>Board Wrapping: </span>
-                    <input name="wrapping" type="checkbox" checked={this.state.wrapping} onChange={this.handleInput}></input>
+                <div id="options">
+                    <div id="generationOptions">
+                        <div>
+                            <span>Auto-Run Speed (iterations per second): {this.state.speed}</span>
+                            <input className="slider" id="speed" name="speed" type="range" min="1" max="4" defaultValue={this.state.speed} onChange={this.handleInput} step="1"/>
+                        </div>
+                        <div>
+                            <button onClick={this.autoGeneration} disabled={this.state.running}>Auto-Run Generation</button>
+                            <button onClick={this.pauseGeneration} disabled={!this.state.running}>Pause Generation</button>
+                            <button onClick={this.nextGeneration} disabled={this.state.running}>Step Generation</button>
+                        </div>
+                        <div>
+                            <input name="wrapping" type="checkbox" checked={this.state.wrapping} onChange={this.handleInput}></input>
+                            <label>Board Wrapping</label>
+                        </div>
+                    </div>
+                    <div id="randomOptions">
+                        <div>
+                            <span>Randomize Cell Density: {this.state.density}</span>
+                            <input className="slider" id="density" name="density" type="range" min="0" max="1" defaultValue={this.state.density} onChange={this.handleInput} step="0.1"/>
+                        </div>
+                        <button onClick={this.randomize} disabled={this.state.running}>Randomize Cells</button>
+                    </div>
+                    <div>
+                        <span>Birth Conditions: </span>
+                        {birthChecks}
+                    </div>
+                    <div>
+                        <span>Survival Conditions: </span>
+                        {survivalChecks}
+                    </div>
                 </div>
             </div>
         );
