@@ -13,13 +13,19 @@ export class Cell extends React.Component {
     }
 
     render() {
+        const aliveStyle = {
+            backgroundColor: this.props.aliveColor
+        }
+        const deadStyle = {
+            backgroundColor: this.props.deadColor
+        }
         if (this.props.alive) {
             return (
-                <button className="cell" id="aliveCell" onClick={this.handleClick}></button>
+                <button className="cell" id="aliveCell" onClick={this.handleClick} style={aliveStyle}></button>
             );
         } else {
             return (
-                <button className="cell" id="deadCell" onClick={this.handleClick}></button>
+                <button className="cell" id="deadCell" onClick={this.handleClick} style={deadStyle}></button>
             );
         }
         
