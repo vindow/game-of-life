@@ -33,7 +33,7 @@ class Board extends React.Component {
             birth: bir,
             survival: surv,
             aliveColor: "#25892D",
-            deadColor: "#EFEFEF"
+            deadColor: "#F3F3F3"
         }
         
         this.nextGeneration = this.nextGeneration.bind(this);
@@ -229,8 +229,8 @@ class Board extends React.Component {
                 <table id="table">
                     {this.createBoard()}
                 </table>
-                <div id="footer">
-                    <div id="options">
+                <div id="options">
+                    <div id="simOptions">
                         <span className="optionsHeader">Simulation Options</span>
                         <div className="optionRow">
                             <div>
@@ -243,7 +243,7 @@ class Board extends React.Component {
                                 <button onClick={this.nextGeneration} disabled={this.state.running}>Step Generation</button>
                             </div>
                             <div>
-                                <input name="wrapping" type="checkbox" checked={this.state.wrapping} onChange={this.handleInput}></input>
+                                <input title="Allows the game board to wrap around on itself like in the game Asteroids." name="wrapping" type="checkbox" checked={this.state.wrapping} onChange={this.handleInput}></input>
                                 <label>Board Wrapping</label>
                             </div>
                         </div>
@@ -270,7 +270,7 @@ class Board extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div id="colors">
+                    <div id="colorOptions">
                         <span className="optionsHeader">Color Options</span>
                         <div className="optionRow">
                             <label>Cell Color</label>
@@ -281,6 +281,10 @@ class Board extends React.Component {
                             <ColorPicker color={this.state.deadColor} onChange={this.handleDeadColorChange}></ColorPicker>
                         </div>
                     </div>
+                </div>
+                <div id="footer">
+                    <p>Based on <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life.</a> The default simulation settings are set up to replicate the rules of Conway's game of the life. You can change the settings to simulate <a href="https://en.wikipedia.org/wiki/Life-like_cellular_automaton">other life-like cellular automata.</a></p>
+                    <a class="github-button" href="https://github.com/vindow/game-of-life" data-size="large" aria-label="Star vindow/game-of-life on GitHub">Github</a>
                 </div>
             </div>
         );

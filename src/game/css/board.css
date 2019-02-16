@@ -6,16 +6,16 @@
     margin-left: auto;
     margin-right: auto;
 }
-#footer {
-    width: 80%;
+#options {
+    width: 75%;
     display: flex;
     margin: 0 auto 0 auto;
 }
-#options {
+#simOptions {
     margin: 0.75em 0.5em;
     border: solid 1px black;
     padding: 0.5em 1em 1em 1em;
-    width: 80%;
+    width: 85%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -53,12 +53,17 @@
     height: 1em;
     margin-left: 1em;
 }
-#colors {
+#colorOptions {
+    width: 15%;
     margin: 0.75em 0.5em;
     border: solid 1px black;
     padding: 0.5em 1em 1em 1em;
-    width: 20%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+#footer {
+    width: 75%;
+    margin: 0 auto;
+    text-align: left;
 }
