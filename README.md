@@ -8,7 +8,7 @@ You can check out a live version [**here.**](https://vindow.github.io/game-of-li
 
 ## Downloading
 
-If you want to download and change the code then simply clone and run
+If you want to download or change the code then simply clone and run
 ```sh
 npm install
 ```
